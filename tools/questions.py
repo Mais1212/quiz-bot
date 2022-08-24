@@ -42,13 +42,21 @@ def extract_questions(file: str) -> list[Question]:
     return questions
 
 
-def main() -> None:
+def get_questions() -> list[Question]:
     questions_folder = 'questions'
     questions_files = os.listdir(questions_folder)
     questions = []
     for questions_file in questions_files:
         file = fetch_data(questions_folder, questions_file)
         questions.append(extract_questions(file))
+
+    # TODO: Я не знаю как исправить нейминг.
+    questions = [question for questions in questions for question in questions]
+    return questions
+
+
+def main() -> None:
+    print(get_questions())
 
 
 if __name__ == "__main__":
