@@ -126,7 +126,7 @@ def _give_up_handle(bot, update, database) -> None:
 
 
 def main() -> None:
-    tg_bot_token = os.getenv("TG_BOT_KEY")
+    tg_bot_token = os.getenv("TELEGRAM_TOKEN")
     database = database_tools.connecte_database()
 
     start_bot(
