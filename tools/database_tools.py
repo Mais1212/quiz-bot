@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def connecte_database():
+def connecte_database() -> redis.client.Redis:
     database = redis.Redis(
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT"),
