@@ -31,11 +31,11 @@ def extract_questions(file: str) -> list[Question]:
             _, answer_text = line.split(sep=":", maxsplit=1)
             answers.append(answer_text.replace("\n", " ").strip())
 
-    for index in range(0, len(processed_questions)):
+    for question, answer in zip(processed_questions, answers):
         questions.append(
             Question(
-                processed_questions[index],
-                answers[index]
+                question,
+                answer
             )
         )
 
@@ -48,16 +48,6 @@ def get_questions() -> list[Question]:
     questions = []
     for questions_file in questions_files:
         file = fetch_data(questions_folder, questions_file)
-        questions.append(extract_questions(file))
+        questions += extract_questions(file)
 
-    # TODO: Я не знаю как исправить нейминг.
-    questions = [question for questions in questions for question in questions]
     return questions
-
-
-def main() -> None:
-    print(get_questions())
-
-
-if __name__ == "__main__":
-    main()

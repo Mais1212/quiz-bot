@@ -7,12 +7,13 @@ from dotenv import load_dotenv
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.longpoll import VkEventType, VkLongPoll
 
-from tools import database_tools, questions_tools
+from tools import questions_tools
 
 load_dotenv()
 
 
-def start_bot(vk_session: vk.vk_api.VkApi, database: redis.client.Redis):
+def start_bot(
+        vk_session: vk.vk_api.VkApi, database: redis.client.Redis) -> None:
     """Start the bot."""
     vk_api = vk_session.get_api()
     keyboard = create_keyboard()
@@ -73,7 +74,13 @@ def main() -> None:
     vk_token = os.getenv("VK_TOKEN")
 
     vk_session = vk.VkApi(token=vk_token)
-    database = database_tools.connecte_database()
+    database = redis.Redis(
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        password=os.getenv("DB_PASSWORD"),
+        username=os.getenv("DB_USERNAME"),
+        decode_responses=True
+    )
 
     start_bot(vk_session, database)
 

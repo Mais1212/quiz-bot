@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from telegram.ext import (CommandHandler, ConversationHandler, Filters,
                           MessageHandler, RegexHandler, Updater)
 
-from tools import database_tools, questions_tools
+from tools import questions_tools
 
 load_dotenv()
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -134,8 +134,14 @@ def _give_up_handle(bot, update, database) -> None:
 
 
 def main() -> None:
+    database = redis.Redis(
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        password=os.getenv("DB_PASSWORD"),
+        username=os.getenv("DB_USERNAME"),
+        decode_responses=True
+    )
     tg_bot_token = os.getenv("TELEGRAM_TOKEN")
-    database = database_tools.connecte_database()
 
     start_bot(
         tg_bot_token=tg_bot_token,
