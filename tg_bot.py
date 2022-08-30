@@ -23,11 +23,12 @@ class States(Enum):
 
 
 def start_bot(
-        tg_bot_token: str, questions: list[questions_tools.Question],
+        tg_bot_token: str,
         database: redis.client.Redis) -> None:
     """Start the bot."""
 
     updater = Updater(tg_bot_token)
+    questions = questions_tools.get_questions()
     dispatcher = updater.dispatcher
 
     start_handler = CommandHandler(
@@ -125,14 +126,12 @@ def _give_up_handle(bot, update, database) -> None:
 
 
 def main() -> None:
-    questions = questions_tools.get_questions()
     tg_bot_token = os.getenv("TG_BOT_KEY")
     database = database_tools.connecte_database()
 
     start_bot(
         tg_bot_token=tg_bot_token,
         database=database,
-        questions=questions
     )
 
 
