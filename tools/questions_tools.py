@@ -42,8 +42,7 @@ def extract_questions(file: str) -> list[Question]:
     return questions
 
 
-def get_questions() -> list[Question]:
-    questions_folder = 'questions'
+def get_questions(questions_folder: str) -> list[Question]:
     questions_files = os.listdir(questions_folder)
     questions = []
     for questions_file in questions_files:

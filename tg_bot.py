@@ -12,7 +12,6 @@ from telegram.ext import (CommandHandler, ConversationHandler, Filters,
 
 from tools import questions_tools
 
-load_dotenv()
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,11 +23,14 @@ class States(Enum):
 
 def start_bot(
         tg_bot_token: str,
-        database: redis.client.Redis) -> None:
+        database: redis.client.Redis,
+        questions_folder: str) -> None:
     """Start the bot."""
 
     updater = Updater(tg_bot_token)
-    questions = questions_tools.get_questions()
+    questions = questions_tools.get_questions(
+        questions_folder=questions_folder
+    )
     dispatcher = updater.dispatcher
 
     start_handler = CommandHandler(
@@ -97,7 +99,9 @@ def _start(bot, update) -> None:
 
 
 def _handle_new_question_request(
-        bot, update, questions: list[questions_tools.Question],
+        bot,
+        update,
+        questions: list[questions_tools.Question],
         database: redis.client.Redis) -> None:
     """Echo the user message."""
     user_id = update.message.chat.id
@@ -134,6 +138,9 @@ def _give_up_handle(bot, update, database) -> None:
 
 
 def main() -> None:
+    load_dotenv()
+
+    questions_folder = os.getenv("QUESTIONS_FOLDER")
     database = redis.Redis(
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT"),
@@ -141,11 +148,13 @@ def main() -> None:
         username=os.getenv("DB_USERNAME"),
         decode_responses=True
     )
+
     tg_bot_token = os.getenv("TELEGRAM_TOKEN")
 
     start_bot(
         tg_bot_token=tg_bot_token,
         database=database,
+        questions_folder=questions_folder
     )
 
 

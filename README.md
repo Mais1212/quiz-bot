@@ -30,8 +30,9 @@ python vk_bot.py
 - `DB_PASSWORD` – Порт [Redis](https://redis.com/).
 - `DB_USERNAME` – Пароль от [Redis](https://redis.com/).
 - `DB_PORT` – Имя пользователя [Redis](https://redis.com/).
+- `QUESTIONS_FOLDER` – Папка с вопросами.
 ## Вопросы
-Вопросы берутся из файлов, находящихся внутри папки `questions`. Каждый файл `questions` должен иметь кодировку `KOI-8` и следовать формату:
+Вопросы берутся из файлов, находящихся внутри папки `QUESTIONS_FOLDER`. Каждый файл `QUESTIONS_FOLDER` должен иметь кодировку `KOI-8` и следовать формату:
 ```
 Вопрос xx:
 ...

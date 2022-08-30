@@ -9,16 +9,18 @@ from vk_api.longpoll import VkEventType, VkLongPoll
 
 from tools import questions_tools
 
-load_dotenv()
-
 
 def start_bot(
-        vk_session: vk.vk_api.VkApi, database: redis.client.Redis) -> None:
+        vk_session: vk.vk_api.VkApi,
+        database: redis.client.Redis,
+        questions_folder: "str") -> None:
     """Start the bot."""
     vk_api = vk_session.get_api()
     keyboard = create_keyboard()
     longpoll = VkLongPoll(vk_session)
-    questions = questions_tools.get_questions()
+    questions = questions_tools.get_questions(
+        questions_folder=questions_folder
+    )
 
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
@@ -39,7 +41,9 @@ def create_keyboard() -> vk.keyboard.VkKeyboard:
 
 
 def handle_message(
-        event, vk_api, keyboard: vk.keyboard.VkKeyboard,
+        event,
+        vk_api,
+        keyboard: vk.keyboard.VkKeyboard,
         database: redis.client.Redis,
         questions: list[questions_tools.Question]) -> None:
 
@@ -71,6 +75,9 @@ def handle_message(
 
 
 def main() -> None:
+    load_dotenv()
+
+    questions_folder = os.getenv("QUESTIONS_FOLDER")
     vk_token = os.getenv("VK_TOKEN")
 
     vk_session = vk.VkApi(token=vk_token)
@@ -82,7 +89,11 @@ def main() -> None:
         decode_responses=True
     )
 
-    start_bot(vk_session, database)
+    start_bot(
+        vk_session=vk_session,
+        database=database,
+        questions_folder=questions_folder
+    )
 
 
 if __name__ == "__main__":
