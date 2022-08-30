@@ -12,8 +12,6 @@ from telegram.ext import (CommandHandler, ConversationHandler, Filters,
 
 from tools import questions_tools
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -138,6 +136,8 @@ def _give_up_handle(bot, update, database) -> None:
 
 
 def main() -> None:
+    logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                        level=logging.INFO)
     load_dotenv()
 
     questions_folder = os.getenv("QUESTIONS_FOLDER")
