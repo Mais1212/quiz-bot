@@ -1,6 +1,8 @@
-# QIZ BOT
+# QUIZ BOT
 
 Бот-викторина.
+
+Пример бота телеграм бота - https://t.me/quizzzzmow_bot.
 
 ## Как запустить 
 - Для запуска библиотеки у вас уже должен быть установлен [Python 3](https://www.python.org/downloads/).
