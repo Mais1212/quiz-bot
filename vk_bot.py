@@ -49,22 +49,21 @@ def handle_message(
 
     user_id = event.user_id
 
-    if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-        if event.text == "Новый вопрос":
-            random_question = random.choice(questions)
-            database.set(user_id, random_question.answer)
-            message_text = random_question.question
-        elif event.text == "Сдаться":
-            if database.get(user_id):
-                message_text = database.get(user_id)
-                database.delete(user_id)
-            else:
-                message_text = "Нажмите 'Новый вопрос'."
-        elif event.text == database.get(user_id):
-            message_text = "Правильно."
+    if event.text == "Новый вопрос":
+        random_question = random.choice(questions)
+        database.set(user_id, random_question.answer)
+        message_text = random_question.question
+    elif event.text == "Сдаться":
+        if database.get(user_id):
+            message_text = database.get(user_id)
             database.delete(user_id)
         else:
-            message_text = "Неправильно."
+            message_text = "Нажмите 'Новый вопрос'."
+    elif event.text == database.get(user_id):
+        message_text = "Правильно."
+        database.delete(user_id)
+    else:
+        message_text = "Неправильно."
 
     vk_api.messages.send(
         user_id=user_id,
