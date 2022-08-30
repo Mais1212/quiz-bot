@@ -108,11 +108,16 @@ def _handle_new_question_request(
 
 def handle_solution_attempt(bot, update, database) -> None:
     user_id = update.message.chat.id
+    keyboard = _create_keyboard()
+
     correct_answer = database.get(user_id)
     if update.message.text == correct_answer:
-        update.message.reply_text("Гратз, ты ответил правильно.")
+        update.message.reply_text(
+            "Гратз, ты ответил правильно.",
+            reply_markup=keyboard
+        )
     else:
-        update.message.reply_text("Ты ошибаешься.")
+        update.message.reply_text("Ты ошибаешься.", reply_markup=keyboard)
 
 
 def _give_up_handle(bot, update, database) -> None:
@@ -122,7 +127,10 @@ def _give_up_handle(bot, update, database) -> None:
         update.message.reply_text(f"Правильный ответ: {correct_answer}.")
         database.delete(user_id)
     else:
-        update.message.reply_text(f"Нажмите 'Новый вопрос'.")
+        keyboard = _create_keyboard()
+        update.message.reply_text(
+            f"Нажмите 'Новый вопрос'.",
+            reply_markup=keyboard)
 
 
 def main() -> None:
